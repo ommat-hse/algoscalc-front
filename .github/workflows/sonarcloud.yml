@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - Prod
-      #- Test
+      - Test
   pull_request:
     types: [opened, synchronize, reopened]
 
