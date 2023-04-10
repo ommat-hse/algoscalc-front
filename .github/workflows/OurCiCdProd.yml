@@ -21,4 +21,4 @@ jobs:
             echo ${{ secrets.SECRET_PHRASE }} | sudo -S git pull;
             echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker-compose --file docker-compose.prod.yml down;
             echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker-compose --file docker-compose.prod.yml up -d --build;
-            echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker system prune --all --force;v
+            echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker system prune --all --force;
