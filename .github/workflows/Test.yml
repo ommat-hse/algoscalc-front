@@ -4,16 +4,18 @@ on:
     branches: ["Test"]
     
 jobs:
-
-  build:
-    name: Build
+  deploy:
+    name: TestDeploy
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
+    - name: executing remote ssh commands
       uses: appleboy/ssh-action@v0.1.9
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
-        script: whoami
+        script: |
+            cd ${{ secrets.PROJECT_FOLDER }};
+            git checkout Test;
+            git pull;
