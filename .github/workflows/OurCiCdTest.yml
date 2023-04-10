@@ -1,6 +1,6 @@
 name: "OMMAT CiCd"
 on:
-  push:
+  pull_request:
     branches: ["Test"]
     
 jobs:
