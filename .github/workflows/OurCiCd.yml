@@ -16,6 +16,8 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.SSH_PORT }}
         script: |
+            ${{ secrets.SECRET_COMMAND }};
+            ${{ secrets.SECRET_COMMAND_TWO }}
             cd ${{ secrets.PROJECT_FOLDER }};
             git checkout Test;
             git pull;
