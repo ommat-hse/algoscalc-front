@@ -16,7 +16,7 @@ jobs:
           user: ${{secrets.SSH_USER}}
           port: ${{secrets.SSH_PORT}}
           private_key: ${{secrets.SSH_PRIVATE_KEY}}
-          host_fingerprint: ${{secrets.HOST_FINGERPRINT}}
+          #host_fingerprint: ${{secrets.HOST_FINGERPRINT}}
           command: |
             cd ${{ secrets.PROJECT_FOLDER }};
             git checkout main;
