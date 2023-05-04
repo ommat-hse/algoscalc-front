@@ -1,5 +1,6 @@
 import React from "react";
 import { NavMenu } from "./NavMenu";
+import { Footer } from "./Footer";
 
 export const Layout = ({ children }) => {
   return (
@@ -15,6 +16,7 @@ export const Layout = ({ children }) => {
       >
         {children}
       </div>
+      <Footer />
     </div>
   );
 };

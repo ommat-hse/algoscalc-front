@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, Navbar, NavbarBrand } from "reactstrap";
+import { Navbar, NavbarBrand } from "reactstrap";
 import "./NavMenu.css";
 import mainLogo from "./img/Logo.png";
 import { prodLink } from "../Api/index";
