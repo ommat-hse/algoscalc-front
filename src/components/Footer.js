@@ -14,7 +14,7 @@ export const Footer = () => {
       <footer className="bg-light text-center text-lg-start">
           <div className="text-center p-3" style={{backgroundColor: "rgba(27, 41, 79, 1)", color: "#FFFFFF"}}>
               © 2023 OMMAT |
-              <Link href="#" underline="none" color="inherit"> обратная связь</Link>
+              <Link href="mailto:support@ommat.ru" underline="none" color="inherit"> обратная связь</Link>
           </div>
       </footer>
   );

@@ -6,8 +6,51 @@ import Container from '@mui/material/Container';
 import calculatorImg from "./img/Calculator.png";
 import telegramIcon from "./img/Telegram.png";
 import vkIcon from "./img/VK.png";
+import {getAlgorithms} from "../Api";
 
 export const Home = () => {
+
+    const [algorithmsHaving, setAlgorithmsHaving] = React.useState("");
+    const [algorithmsCards, setAlgorithmsCards] = React.useState("");
+
+    const handleClickOnCard = (link) => {
+        window.location.href = link;
+    };
+
+    const updateAlgorithms = () => {
+        getAlgorithms()
+            .then((res) => {
+                if(res !== null) {
+                    let arrNineCards = [];
+                    for (let i = 0; i < res.data.algorithms.length && i < 9; i++) {
+                        arrNineCards.push(res.data.algorithms[i]);
+                    }
+                    setAlgorithmsHaving(res.data.algorithms.map((x) => (
+                            <p key={`alg-${x.name}`}>
+                                <Link href={`/algorithm?alg=${x.name}`} underline="hover" color="#46484D"
+                                      id={`alg-${x.name}`}>{x.title}</Link>
+                            </p>
+                        )
+                    ));
+                    setAlgorithmsCards(arrNineCards.map((x) => (
+                            <Container key={`card-alg-${x.name}`} style={{marginTop: "10px", paddingRight: "0px", cursor: "pointer"}} onClick={() =>  handleClickOnCard(`/algorithm?alg=${x.name}`)}>
+                                <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                    <p style={{fontWeight: "bold", textAlign: "center"}}>{x.title}</p>
+                                </Box>
+                            </Container>
+                        )
+                    ));
+                }
+            }
+            )
+            .catch((error) => {
+                alert(error);
+            });
+    };
+
+    React.useEffect(() => {
+        updateAlgorithms();
+    }, []);
 
   return (
       <div style={{display: "flex", marginTop: "30px"}}>
@@ -15,24 +58,8 @@ export const Home = () => {
               <h4 style={{fontWeight: "bold"}}>Главная</h4>
               <Divider style={{marginBottom: "10px"}}></Divider>
               <div style={{display: "grid"}}>
-                  <p>
-                      <Link href="#" underline="hover" color="#46484D">Определитель матрицы</Link>
-                  </p>
-                  <p>
-                      <Link href="#" underline="hover" color="#46484D">Числа Фибоначчи</Link>
-                  </p>
-                  <p>
-                      <Link href="#" underline="hover" color="#46484D">НОД и НОК двух чисел</Link>
-                  </p>
-                  <p>
-                      <Link href="#" underline="hover" color="#46484D">Расход топлива</Link>
-                  </p>
-                  <p>
-                      <Link href="#" underline="hover" color="#46484D">Проверка числа на простоту</Link>
-                  </p>
-                  <p>
-                      <Link href="#" underline="hover" color="#46484D">Проверка ряда чисел на совершенность</Link>
-                  </p>
+                  {algorithmsHaving === "" && (<p>Готовим калькуляторы...</p>)}
+                  {algorithmsHaving !== "" && algorithmsHaving}
               </div>
           </div>
           <div style={{maxWidth: "75%", margin: "5px"}}>
@@ -54,51 +81,8 @@ export const Home = () => {
                           gridTemplateColumns: 'repeat(3, 1fr)',
                       }}
                   >
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Онлайн кальуляторы</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Числа Фибоначчи</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>НОД и НОК двух чисел</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Расход топлива для поездки на заданное расстояние</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Проверка числа на простоту</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Проверка рядя чисел на совершенность</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Онлайн кальуляторы</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>Числа Фибоначчи</p>
-                          </Box>
-                      </Container>
-                      <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                          <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1, width: "240px", height: "200px", display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <p style={{fontWeight: "bold", textAlign: "center"}}>НОД и НОК двух чисел</p>
-                          </Box>
-                      </Container>
+                      {algorithmsCards === "" && (<p>Готовим калькуляторы...</p>)}
+                      {algorithmsCards !== "" && algorithmsCards}
                   </Box>
               </div>
               <div>
