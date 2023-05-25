@@ -6,7 +6,8 @@ import Container from '@mui/material/Container';
 import calculatorImg from "./img/Calculator.png";
 import telegramIcon from "./img/Telegram.png";
 import vkIcon from "./img/VK.png";
-import {getAlgorithms} from "../Api";
+import ourLogo from "./img/Logo.png"
+import {getAlgorithms, host} from "../Api";
 
 export const Home = () => {
 
@@ -102,11 +103,11 @@ export const Home = () => {
                   <p>Поделиться страницей в социальных сетях:</p>
                   <div>
                       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <a href="#">
+                      <a href={`https://t.me/share/url?url=${host}&text=Онлайн кальуляторы OMMAT.ru`} target="_blank">
                           <img src={telegramIcon} alt="Телеграм" style={{marginRight: "10px"}} />
                       </a>
                       {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                      <a href="#">
+                      <a href={`https://vk.com/share.php?url=${host}&title=Онлайн кальуляторы OMMAT.ru&noparse=true&image=${host}${ourLogo}`} target="_blank">
                           <img src={vkIcon} alt="ВКонтакте"/>
                       </a>
                   </div>
