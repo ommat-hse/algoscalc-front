@@ -8,6 +8,7 @@ import {getAlgorithms, getAlgorithmDescription, host} from "../Api";
 import telegramIcon from "./img/Telegram.png";
 import vkIcon from "./img/VK.png";
 import ourLogo from "./img/Logo.png";
+import {TextField} from "@mui/material";
 
 export const Algorithm = () => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -82,7 +83,14 @@ export const Algorithm = () => {
               <div>
                   <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                       <Box sx={{ bgcolor: "#F6F6F6", padding: "15px"}}>
-
+                          <div><b>Средний расход топлива (л/100км)</b></div>
+                          <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="outlined" style={{marginTop: "5px"}} />
+                          <div style={{marginTop: "5px"}}><b>Стоимость 1 л. топлива (руб)</b></div>
+                          <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="outlined" style={{marginTop: "5px"}} />
+                          <div style={{marginTop: "5px"}}><b>Сколько хотите проехать</b></div>
+                          <TextField fullWidth id="outlined-basic" placeholder="Введите неотрицательное вещественное число" variant="outlined" style={{marginTop: "5px"}} />
+                          <div style={{marginTop: "5px"}}><b>Тестовое поле</b></div>
+                          <TextField fullWidth id="outlined-basic" placeholder="Тестовая подсказка" variant="outlined" style={{marginTop: "5px"}} />
                       </Box>
                   </Container>
               </div>
