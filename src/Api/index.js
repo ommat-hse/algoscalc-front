@@ -8,3 +8,7 @@ export const prodLink = `${window.location.hostname}`;
 export const getAlgorithms = (): Promise<any> => {
     return axios.get(`${host}/api/algorithms`);
 };
+
+export const getAlgorithmDescription = (algorithm :String): Promise<any> => {
+    return axios.get(`${host}/api/algorithms/${algorithm}`);
+};

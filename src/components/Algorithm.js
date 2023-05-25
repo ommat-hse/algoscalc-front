@@ -3,11 +3,21 @@ import Link from '@mui/material/Link';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import {getAlgorithms} from "../Api";
+import { Navigate } from 'react-router-dom';
+import {getAlgorithms, getAlgorithmDescription, host} from "../Api";
+import telegramIcon from "./img/Telegram.png";
+import vkIcon from "./img/VK.png";
+import ourLogo from "./img/Logo.png";
 
 export const Algorithm = () => {
+    const queryParameters = new URLSearchParams(window.location.search);
+    const algorithmParametr = queryParameters.get("alg");
+    const [algorithmTitle, setAlgorithmTitle] = React.useState("Загружаем алгоритм...");
+    const [algorithmDescription, setAlgorithmDescription] = React.useState("Загружаем алгоритм...");
+    const [redirectToHome, setRedirectToHome] = React.useState(false);
 
     const [algorithmsHaving, setAlgorithmsHaving] = React.useState("");
+
     const updateAlgorithms = () => {
         getAlgorithms()
             .then((res) => {
@@ -27,12 +37,35 @@ export const Algorithm = () => {
             });
     };
 
+    const loadAlgorithm = () => {
+        getAlgorithmDescription(algorithmParametr)
+            .then((res) => {
+                    if(res !== null) {
+                        if(res.data.errors === null) {
+                            setAlgorithmTitle(res.data.result.title);
+                            setAlgorithmDescription(res.data.result.description);
+                        }
+                        else
+                        {
+                            alert(res.data.errors);
+                            setRedirectToHome(true);
+                        }
+                    }
+                }
+            )
+            .catch((error) => {
+                alert(error);
+            });
+    };
+
     React.useEffect(() => {
         updateAlgorithms();
+        loadAlgorithm();
     }, []);
 
   return (
       <div style={{display: "flex", marginTop: "30px"}}>
+          {redirectToHome && (<Navigate to="/" />) }
           <div style={{maxWidth: "25%", margin: "5px"}}>
               <h4 style={{fontWeight: "bold", cursor: "pointer"}} onClick={() => {window.location.href = "#";}}>Главная</h4>
               <Divider style={{marginBottom: "10px"}}></Divider>
@@ -41,27 +74,37 @@ export const Algorithm = () => {
                   {algorithmsHaving !== "" && algorithmsHaving}
               </div>
           </div>
-          <div style={{maxWidth: "75%", margin: "5px"}}>
+          <div style={{maxWidth: "75%", margin: "5px", width: "100%"}}>
+              <div style={{marginLeft: "25px"}}>
+                  <h3>{algorithmTitle}</h3>
+                  <p>{algorithmDescription}</p>
+              </div>
               <div>
                   <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                      <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1}}>
-                          <h1 style={{fontWeight: "bold"}}>Онлайн кальуляторы</h1>
-                          <div style={{textAlign: "justify"}}>
-                            <p>OMMAT.ru - бесплатный сервис онлайн-калькуляторов. С помощью нашего сервиса Вы сможете без регистрации и прочих проверок быстро и точно произвести необходимые вычисления. Мы постоянно работаем над улучшением предоставляемого Вам сервиса и созданием новых калькуляторов, чтобы каждый пользователь смог оперативно и максимально точно произвести нужные расчеты. Мы прилагаем много усилий для улучшения нашего сервиса и искренне надеемся, что с помощью представленных онлайн-калькуляторов Вы смогли решить поставленные перед Вами задачи. Если Вам понравился наш сервис онлайн-калькуляторов, то добавляйте его в закладки и расскажите про него друзьям через Вашу социальную сеть.</p>
-                          </div>
+                      <Box sx={{ bgcolor: "#F6F6F6", padding: "15px"}}>
+
                       </Box>
                   </Container>
               </div>
               <div>
                   <Container style={{marginTop: "10px", paddingRight: "0px"}}>
-                      <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1}}>
-                          <h1 style={{fontWeight: "bold"}}>Lorem ipsum</h1>
-                          <div style={{textAlign: "justify"}}>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                          </div>
+                      <Box sx={{ bgcolor: "#AFB4C1", padding: "15px"}}>
+
                       </Box>
                   </Container>
+              </div>
+              <div style={{textAlign: "right", marginTop: "40px", marginBottom: "20px"}}>
+                  <p>Поделиться страницей в социальных сетях:</p>
+                  <div>
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <a href={`https://t.me/share/url?url=${host}/algorithm?alg=${algorithmParametr}&text=Онлайн кальуляторы OMMAT.ru - ${algorithmTitle}`} target="_blank">
+                          <img src={telegramIcon} alt="Телеграм" style={{marginRight: "10px"}} />
+                      </a>
+                      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                      <a href={`https://vk.com/share.php?url=${host}/algorithm?alg=${algorithmParametr}&title=Онлайн кальуляторы OMMAT.ru - ${algorithmTitle}&noparse=true&image=${host}${ourLogo}`} target="_blank">
+                          <img src={vkIcon} alt="ВКонтакте"/>
+                      </a>
+                  </div>
               </div>
           </div>
       </div>
