@@ -10,6 +10,7 @@ import vkIcon from "./img/VK.png";
 import ourLogo from "./img/Logo.png";
 import {TextField} from "@mui/material";
 import ModalWindowDialog from "./ModalWindow/ModalWindowDialog";
+import BooleanInput from "./controls/BooleanInput/BooleanInput";
 
 export const Algorithm = () => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -116,6 +117,12 @@ export const Algorithm = () => {
                               <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="filled" style={{marginTop: "5px"}} />
                               <div style={{marginTop: "5px"}}><b>Сколько хотите проехать</b></div>
                               <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="standard" style={{marginTop: "5px"}} />
+                              <BooleanInput
+                                  description="При проставлении отметки объем и стоимость будут округлены до целого"
+                                  title="Округлять результат"
+                                  isRequired={true}
+                                  id="need_round"
+                              />
                           </Box>
                       </Container>
                   </div>
