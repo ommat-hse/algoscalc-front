@@ -8,9 +8,10 @@ import {getAlgorithms, getAlgorithmDescription, host} from "../Api";
 import telegramIcon from "./img/Telegram.png";
 import vkIcon from "./img/VK.png";
 import ourLogo from "./img/Logo.png";
-import {TextField} from "@mui/material";
+import Button from '@mui/material/Button';
 import ModalWindowDialog from "./ModalWindow/ModalWindowDialog";
 import BooleanInput from "./controls/BooleanInput/BooleanInput";
+import ScalarInput from "./controls/ScalarInput/ScalarInput";
 
 export const Algorithm = () => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -111,30 +112,63 @@ export const Algorithm = () => {
                   <div>
                       <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                           <Box sx={{ bgcolor: "#F6F6F6", padding: "15px"}}>
-                              <div><b>Средний расход топлива (л/100км)</b></div>
-                              <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="outlined" style={{marginTop: "5px"}} />
-                              <div style={{marginTop: "5px"}}><b>Стоимость 1 л. топлива (руб)</b></div>
-                              <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="filled" style={{marginTop: "5px"}} />
-                              <div style={{marginTop: "5px"}}><b>Сколько хотите проехать</b></div>
-                              <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="standard" style={{marginTop: "5px"}} />
-                              <BooleanInput
-                                  description="При проставлении отметки объем и стоимость будут округлены до целого"
-                                  title="Округлять результат"
-                                  isRequired={true}
-                                  id="need_round"
-                              />
+                              <div>
+                                  <ScalarInput
+                                      title="Средний расход топлива (л/100км)"
+                                      description="Введите неотрицательное вещественное число"
+                                      variant="filled"
+                                      isFullWidth={true}
+                                      id="mean_consumption"
+                                  />
+                                  <ScalarInput
+                                      title="Стоимость 1 л. топлива (руб)"
+                                      description="Введите неотрицательное вещественное число"
+                                      variant="filled"
+                                      isFullWidth={true}
+                                      id="price"
+                                  />
+                                  <ScalarInput
+                                      title="Сколько хотите проехать"
+                                      description="Введите неотрицательное вещественное число"
+                                      variant="filled"
+                                      isFullWidth={true}
+                                      id="distance"
+                                  />
+                                  <BooleanInput
+                                      description="При проставлении отметки объем и стоимость будут округлены до целого"
+                                      title="Округлять результат"
+                                      isRequired={true}
+                                      id="need_round"
+                                  />
+                              </div>
+                              <Button variant="contained">Получить результат</Button>
                           </Box>
                       </Container>
                   </div>
                   <div>
                       <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                           <Box sx={{ bgcolor: "#AFB4C1", padding: "15px"}}>
-                              <div><b>Средний расход топлива (л/100км)</b></div>
-                              <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="outlined" style={{marginTop: "5px"}} />
-                              <div style={{marginTop: "5px"}}><b>Стоимость 1 л. топлива (руб)</b></div>
-                              <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="filled" style={{marginTop: "5px"}} />
-                              <div style={{marginTop: "5px"}}><b>Сколько хотите проехать</b></div>
-                              <TextField fullWidth id="outlined-basic" label="Введите неотрицательное вещественное число" variant="standard" style={{marginTop: "5px"}} />
+                              <ScalarInput
+                                  title="Средний расход топлива (л/100км)"
+                                  variant="outlined"
+                                  isFullWidth={true}
+                                  id="mean_consumptiona"
+                                  value="Тестовый ответ 1"
+                              />
+                              <ScalarInput
+                                  title="Стоимость 1 л. топлива (руб)"
+                                  variant="outlined"
+                                  isFullWidth={true}
+                                  id="pricea"
+                                  value="Тестовый ответ 2"
+                              />
+                              <ScalarInput
+                                  title="Сколько хотите проехать"
+                                  variant="outlined"
+                                  isFullWidth={true}
+                                  id="distancea"
+                                  value="Тестовый ответ 3"
+                              />
                           </Box>
                       </Container>
                   </div>
