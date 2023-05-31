@@ -17,9 +17,11 @@ type BooleanInputTypes = {
     isChecked?: boolean;
     size?: string;
     id?: string;
+    data_shape?: string;
+    data_type?: string;
 };
 
-const BooleanInput = ({ description, title, isDisabeld, isChecked, isDefaultChecked, size, id, callback = () => {} }: BooleanInputTypes) => {
+const BooleanInput = ({ description, title, isDisabeld, isChecked, isDefaultChecked, size, id, data_shape, data_type, callback = () => {} }: BooleanInputTypes) => {
 
     return (
         <>

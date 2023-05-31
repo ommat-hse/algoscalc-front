@@ -16,9 +16,12 @@ type ScalarInputTypes = {
     isRequired?: boolean;
     value?: string;
     id?: string;
+    data_shape?: string;
+    data_type?: string;
+    isReadOnly?: boolean;
 };
 
-const ScalarInput = ({ description, title, isDisabeld, value, isFullWidth, isRequired, id, variant, callback = () => {} }: ScalarInputTypes) => {
+const ScalarInput = ({ description, title, isDisabeld, value, isFullWidth, isRequired, id, variant, isReadOnly, data_shape, data_type, callback = () => {} }: ScalarInputTypes) => {
 
     return (
         <>
@@ -32,6 +35,9 @@ const ScalarInput = ({ description, title, isDisabeld, value, isFullWidth, isReq
                 required={isRequired}
                 value={value}
                 style={{marginTop: "5px"}}
+                InputProps={{
+                    readOnly: isReadOnly
+                }}
             />
         </>
     )

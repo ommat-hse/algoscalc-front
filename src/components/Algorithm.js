@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import ModalWindowDialog from "./ModalWindow/ModalWindowDialog";
 import BooleanInput from "./controls/BooleanInput/BooleanInput";
 import ScalarInput from "./controls/ScalarInput/ScalarInput";
+import MatrixInput from "./controls/MatrixInput/MatrixInput";
 
 export const Algorithm = () => {
     const queryParameters = new URLSearchParams(window.location.search);
@@ -20,12 +21,16 @@ export const Algorithm = () => {
     const [openDialogModal, setOpenDialogModal] = React.useState(false);
     const [goHomeModal, setGoHomeModal] = React.useState(false);
     const [wrongMessage, setWrongMessage] = React.useState("");
+    const [modalTitle, setModalTitle] = React.useState("");
 
     const [algorithmTitle, setAlgorithmTitle] = React.useState("Загружаем алгоритм...");
     const [algorithmDescription, setAlgorithmDescription] = React.useState("Загружаем алгоритм...");
     const [redirectToHome, setRedirectToHome] = React.useState(false);
 
     const [algorithmsHaving, setAlgorithmsHaving] = React.useState("");
+
+    const [algorithmParametrs, setAlgorithmParametrs] = React.useState("");
+    const [algorithmOutputs, setAlgorithmOutputs] = React.useState("");
 
     const updateAlgorithms = () => {
         getAlgorithms()
@@ -43,9 +48,28 @@ export const Algorithm = () => {
             )
             .catch((error) => {
                 setWrongMessage(error.message);
+                setModalTitle("Произошла ошибка!");
                 setOpenDialogModal(!openDialogModal);
             });
     };
+
+    interface IParametrs
+    {
+        name: string,
+        title: string,
+        description: string,
+        data_type: string,
+        data_shape: string
+    }
+
+    interface IOutputs
+    {
+        name: string,
+        title: string,
+        description: string,
+        data_type: string,
+        data_shape: string
+    }
 
     const loadAlgorithm = () => {
         getAlgorithmDescription(algorithmParametr)
@@ -54,10 +78,95 @@ export const Algorithm = () => {
                         if(res.data.errors === null) {
                             setAlgorithmTitle(res.data.result.title);
                             setAlgorithmDescription(res.data.result.description);
+                            setAlgorithmParametrs(res.data.result.parameters.map((x: IParametrs) => {
+                                if(x.data_type === "bool")
+                                {
+                                    return (
+                                        <BooleanInput
+                                          description={x.description}
+                                          title={x.title}
+                                          id={x.name}
+                                          key={x.name}
+                                          data_shape={x.data_shape}
+                                          data_type={x.data_type}
+                                        />
+                                    );
+                                }
+                                if(x.data_type !== "bool" && x.data_shape !== "matrix")
+                                {
+                                    return (
+                                        <ScalarInput
+                                            title={x.title}
+                                            description={x.description}
+                                            variant="filled"
+                                            isFullWidth={true}
+                                            id={x.name}
+                                            key={x.name}
+                                            data_shape={x.data_shape}
+                                            data_type={x.data_type}
+                                            isReadOnly={false}
+                                        />
+                                    );
+                                }
+                                if(x.data_shape === "matrix")
+                                {
+                                    return (
+                                        <MatrixInput
+                                            title={x.title}
+                                            description={"Пока не могу нарисовать матрицу, но усердно пытаюсь ее спроектировать. У меня лапки ༼ つ ◕_◕ ༽つ"}
+                                            id={x.name}
+                                            key={x.name}
+                                        />
+                                    );
+                                }
+                            }));
+                            setAlgorithmOutputs(res.data.result.outputs.map((x: IOutputs) => {
+                                if(x.data_type === "bool")
+                                {
+                                    return (
+                                        <BooleanInput
+                                            description={x.description}
+                                            title={x.title}
+                                            id={x.name}
+                                            key={x.name}
+                                            data_shape={x.data_shape}
+                                            data_type={x.data_type}
+                                            isDisabeld={true}
+                                        />
+                                    );
+                                }
+                                if(x.data_type !== "bool" && x.data_shape !== "matrix")
+                                {
+                                    return (
+                                        <ScalarInput
+                                            title={x.title}
+                                            variant="outlined"
+                                            isFullWidth={true}
+                                            id={x.name}
+                                            key={x.name}
+                                            data_shape={x.data_shape}
+                                            data_type={x.data_type}
+                                            isReadOnly={true}
+                                        />
+                                    );
+                                }
+                                if(x.data_shape === "matrix")
+                                {
+                                    return (
+                                        <MatrixInput
+                                            title={x.title}
+                                            description={"Пока не могу нарисовать матрицу, но усердно пытаюсь ее спроектировать. У меня лапки ༼ つ ◕_◕ ༽つ"}
+                                            id={x.name}
+                                            key={x.name}
+                                        />
+                                    );
+                                }
+                            }));
                         }
                         else
                         {
                             setWrongMessage(res.data.errors);
+                            setModalTitle("Произошла ошибка!");
                             setGoHomeModal(true);
                             setOpenDialogModal(!openDialogModal);
                         }
@@ -66,6 +175,7 @@ export const Algorithm = () => {
             )
             .catch((error) => {
                 setWrongMessage(error.message);
+                setModalTitle("Произошла ошибка!");
                 setOpenDialogModal(!openDialogModal);
             });
     };
@@ -86,7 +196,7 @@ export const Algorithm = () => {
           <div>
               {openDialogModal && (
                   <ModalWindowDialog
-                      title="Произошла ошибка!"
+                      title={modalTitle}
                       message={wrongMessage}
                       onClose={(home: Boolean) => {setOpenDialogModal(!openDialogModal); redirectToHomePage(home);}}
                       isActive={openDialogModal}
@@ -113,62 +223,16 @@ export const Algorithm = () => {
                       <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                           <Box sx={{ bgcolor: "#F6F6F6", padding: "15px"}}>
                               <div>
-                                  <ScalarInput
-                                      title="Средний расход топлива (л/100км)"
-                                      description="Введите неотрицательное вещественное число"
-                                      variant="filled"
-                                      isFullWidth={true}
-                                      id="mean_consumption"
-                                  />
-                                  <ScalarInput
-                                      title="Стоимость 1 л. топлива (руб)"
-                                      description="Введите неотрицательное вещественное число"
-                                      variant="filled"
-                                      isFullWidth={true}
-                                      id="price"
-                                  />
-                                  <ScalarInput
-                                      title="Сколько хотите проехать"
-                                      description="Введите неотрицательное вещественное число"
-                                      variant="filled"
-                                      isFullWidth={true}
-                                      id="distance"
-                                  />
-                                  <BooleanInput
-                                      description="При проставлении отметки объем и стоимость будут округлены до целого"
-                                      title="Округлять результат"
-                                      isRequired={true}
-                                      id="need_round"
-                                  />
+                                  {algorithmParametrs}
                               </div>
-                              <Button variant="contained">Получить результат</Button>
+                              <Button variant="contained" style={{marginTop: "15px"}} onClick={() => {setWrongMessage("Пока не могу, но усердно учусь этому ремеслу. У меня лапки ༼ つ ◕_◕ ༽つ"); setModalTitle("Ой..."); setOpenDialogModal(!openDialogModal);}}>Получить результат</Button>
                           </Box>
                       </Container>
                   </div>
                   <div>
                       <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                           <Box sx={{ bgcolor: "#AFB4C1", padding: "15px"}}>
-                              <ScalarInput
-                                  title="Средний расход топлива (л/100км)"
-                                  variant="outlined"
-                                  isFullWidth={true}
-                                  id="mean_consumptiona"
-                                  value="Тестовый ответ 1"
-                              />
-                              <ScalarInput
-                                  title="Стоимость 1 л. топлива (руб)"
-                                  variant="outlined"
-                                  isFullWidth={true}
-                                  id="pricea"
-                                  value="Тестовый ответ 2"
-                              />
-                              <ScalarInput
-                                  title="Сколько хотите проехать"
-                                  variant="outlined"
-                                  isFullWidth={true}
-                                  id="distancea"
-                                  value="Тестовый ответ 3"
-                              />
+                              {algorithmOutputs}
                           </Box>
                       </Container>
                   </div>
