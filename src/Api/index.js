@@ -12,3 +12,7 @@ export const getAlgorithms = (): Promise<any> => {
 export const getAlgorithmDescription = (algorithm :String): Promise<any> => {
     return axios.get(`${host}/api/algorithms/${algorithm}`);
 };
+
+export const getAlgorithmResult = (algorithm :String, data): Promise<any> => {
+    return axios.post(`${host}/api/algorithms/${algorithm}`, data);
+};

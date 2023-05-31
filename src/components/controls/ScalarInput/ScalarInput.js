@@ -38,6 +38,7 @@ const ScalarInput = ({ description, title, isDisabeld, value, isFullWidth, isReq
                 InputProps={{
                     readOnly: isReadOnly
                 }}
+                name={data_type}
             />
         </>
     )

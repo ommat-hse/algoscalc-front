@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { Navigate } from 'react-router-dom';
-import {getAlgorithms, getAlgorithmDescription, host} from "../Api";
+import {getAlgorithms, getAlgorithmDescription, getAlgorithmResult, host} from "../Api";
 import telegramIcon from "./img/Telegram.png";
 import vkIcon from "./img/VK.png";
 import ourLogo from "./img/Logo.png";
@@ -68,7 +68,8 @@ export const Algorithm = () => {
         title: string,
         description: string,
         data_type: string,
-        data_shape: string
+        data_shape: string,
+        value: string
     }
 
     const loadAlgorithm = () => {
@@ -191,6 +192,82 @@ export const Algorithm = () => {
         }
     };
 
+    const handleSubmit = (event) => {
+        const data = { parameters: [] };
+        for (let i = 0; i < event.target.length-1; i++) {
+            if(event.target[i].value !== "on"){
+                if(event.target[i].name === "string")
+                    data.parameters.push({ name: event.target[i].id, value: event.target[i].value });
+                else if(event.target[i].name === "float")
+                    data.parameters.push({ name: event.target[i].id, value: parseFloat(event.target[i].value) });
+                else
+                    data.parameters.push({ name: event.target[i].id, value: Number(event.target[i].value) });
+            }
+            else
+                data.parameters.push({ name: event.target[i].id, value: event.target[i].checked });
+        }
+        getAlgorithmResult(algorithmParametr, data)
+            .then((res) => {
+                    if(res !== null) {
+                        if(res.data.errors === null) {
+                            setAlgorithmOutputs(res.data.result.outputs.map((x: IOutputs) => {
+                                if(x.data_type === "bool")
+                                {
+                                    return (
+                                        <BooleanInput
+                                            description={x.description}
+                                            title={x.title}
+                                            id={x.name}
+                                            key={x.name}
+                                            isDisabeld={true}
+                                        />
+                                    );
+                                }
+                                if(x.data_type !== "bool" && x.data_shape !== "matrix")
+                                {
+                                    return (
+                                        <ScalarInput
+                                            title={x.title}
+                                            variant="outlined"
+                                            isFullWidth={true}
+                                            id={x.name}
+                                            key={x.name}
+                                            isReadOnly={true}
+                                            value={x.value}
+                                        />
+                                    );
+                                }
+                                if(x.data_shape === "matrix")
+                                {
+                                    return (
+                                        <MatrixInput
+                                            title={x.title}
+                                            description={"Пока не могу нарисовать матрицу, но усердно пытаюсь ее спроектировать. У меня лапки ༼ つ ◕_◕ ༽つ"}
+                                            id={x.name}
+                                            key={x.name}
+                                        />
+                                    );
+                                }
+                            }));
+                        }
+                        else
+                        {
+                            setWrongMessage(res.data.errors);
+                            setModalTitle("Произошла ошибка!");
+                            if(res.data.errors.includes("Алгоритм с именем"))
+                                setGoHomeModal(true);
+                            setOpenDialogModal(!openDialogModal);
+                        }
+                    }
+                }
+            )
+            .catch((error) => {
+                setWrongMessage(error.message);
+                setModalTitle("Произошла ошибка!");
+                setOpenDialogModal(!openDialogModal);
+            });
+    };
+
   return (
       <>
           <div>
@@ -222,10 +299,12 @@ export const Algorithm = () => {
                   <div>
                       <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                           <Box sx={{ bgcolor: "#F6F6F6", padding: "15px"}}>
-                              <div>
-                                  {algorithmParametrs}
-                              </div>
-                              <Button variant="contained" style={{marginTop: "15px"}} onClick={() => {setWrongMessage("Пока не могу, но усердно учусь этому ремеслу. У меня лапки ༼ つ ◕_◕ ༽つ"); setModalTitle("Ой..."); setOpenDialogModal(!openDialogModal);}}>Получить результат</Button>
+                            <form onSubmit={(event) => {event.preventDefault(); handleSubmit(event)}}>
+                                <div>
+                                    {algorithmParametrs}
+                                </div>
+                                <Button variant="contained" type="submit" style={{marginTop: "15px"}}>Получить результат</Button>
+                            </form>
                           </Box>
                       </Container>
                   </div>
