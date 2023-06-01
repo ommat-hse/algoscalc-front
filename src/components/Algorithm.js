@@ -125,15 +125,10 @@ export const Algorithm = () => {
                                 if(x.data_type === "bool")
                                 {
                                     return (
-                                        <BooleanInput
-                                            description={x.description}
-                                            title={x.title}
-                                            id={x.name}
-                                            key={x.name}
-                                            data_shape={x.data_shape}
-                                            data_type={x.data_type}
-                                            isDisabeld={true}
-                                        />
+                                        <div key={x.name}>
+                                            <input type="checkbox" id={x.name} disabled style={{margin: "0.4rem"}}/>
+                                            <label htmlFor={x.name}>{x.title}</label>
+                                        </div>
                                     );
                                 }
                                 if(x.data_type !== "bool" && x.data_shape !== "matrix")
@@ -196,12 +191,18 @@ export const Algorithm = () => {
         const data = { parameters: [] };
         for (let i = 0; i < event.target.length-1; i++) {
             if(event.target[i].value !== "on"){
-                if(event.target[i].name === "string")
+                if(event.target[i].name === "string|scalar")
                     data.parameters.push({ name: event.target[i].id, value: event.target[i].value });
-                else if(event.target[i].name === "float")
+                else if(event.target[i].name === "float|scalar")
                     data.parameters.push({ name: event.target[i].id, value: parseFloat(event.target[i].value) });
-                else
+                else if(event.target[i].name === "int|scalar")
                     data.parameters.push({ name: event.target[i].id, value: Number(event.target[i].value) });
+                else if(event.target[i].name === "string|list")
+                    data.parameters.push({ name: event.target[i].id, value: event.target[i].value.replace(" ", "").split(",") });
+                else if(event.target[i].name === "float|list")
+                    data.parameters.push({ name: event.target[i].id, value: event.target[i].value.replace(" ", "").split(",").map(parseFloat) });
+                else if(event.target[i].name === "int|list")
+                    data.parameters.push({ name: event.target[i].id, value: event.target[i].value.replace(" ", "").split(",").map(Number) });
             }
             else
                 data.parameters.push({ name: event.target[i].id, value: event.target[i].checked });
@@ -210,45 +211,15 @@ export const Algorithm = () => {
             .then((res) => {
                     if(res !== null) {
                         if(res.data.errors === null) {
-                            setAlgorithmOutputs(res.data.result.outputs.map((x: IOutputs) => {
-                                if(x.data_type === "bool")
-                                {
-                                    return (
-                                        <BooleanInput
-                                            description={x.description}
-                                            title={x.title}
-                                            id={x.name}
-                                            key={x.name}
-                                            isDisabeld={true}
-                                        />
-                                    );
+                            for (let i = 0; i < res.data.result.outputs.length; i++) {
+                                console.log(res.data.result.outputs[i]);
+                                if(typeof res.data.result.outputs[i].value === "boolean") {
+                                    document.getElementById(res.data.result.outputs[i].name).checked = res.data.result.outputs[i].value;
                                 }
-                                if(x.data_type !== "bool" && x.data_shape !== "matrix")
-                                {
-                                    return (
-                                        <ScalarInput
-                                            title={x.title}
-                                            variant="outlined"
-                                            isFullWidth={true}
-                                            id={x.name}
-                                            key={x.name}
-                                            isReadOnly={true}
-                                            value={x.value}
-                                        />
-                                    );
+                                else {
+                                    document.getElementById(res.data.result.outputs[i].name).value = res.data.result.outputs[i].value;
                                 }
-                                if(x.data_shape === "matrix")
-                                {
-                                    return (
-                                        <MatrixInput
-                                            title={x.title}
-                                            description={"Пока не могу нарисовать матрицу, но усердно пытаюсь ее спроектировать. У меня лапки ༼ つ ◕_◕ ༽つ"}
-                                            id={x.name}
-                                            key={x.name}
-                                        />
-                                    );
-                                }
-                            }));
+                            }
                         }
                         else
                         {
