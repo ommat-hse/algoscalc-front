@@ -114,9 +114,12 @@ export const Algorithm = () => {
                                     return (
                                         <MatrixInput
                                             title={x.title}
-                                            description={"Пока не могу нарисовать матрицу, но усердно пытаюсь ее спроектировать. У меня лапки ༼ つ ◕_◕ ༽つ"}
+                                            description={x.description}
                                             id={x.name}
                                             key={x.name}
+                                            data_shape={x.data_shape}
+                                            data_type={x.data_type}
+                                            isOutputMatrix={false}
                                         />
                                     );
                                 }
@@ -151,9 +154,12 @@ export const Algorithm = () => {
                                     return (
                                         <MatrixInput
                                             title={x.title}
-                                            description={"Пока не могу нарисовать матрицу, но усердно пытаюсь ее спроектировать. У меня лапки ༼ つ ◕_◕ ༽つ"}
+                                            description={x.description}
                                             id={x.name}
                                             key={x.name}
+                                            data_shape={x.data_shape}
+                                            data_type={x.data_type}
+                                            isOutputMatrix={true}
                                         />
                                     );
                                 }

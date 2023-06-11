@@ -67,7 +67,7 @@ export const Home = () => {
               <div>
                   <Container style={{marginTop: "10px", paddingRight: "0px"}}>
                       <Box sx={{ bgcolor: "#F6F6F6", padding: "15px", border: 1}}>
-                          <h1 style={{fontWeight: "bold"}}>Онлайн кальуляторы</h1>
+                          <h1 style={{fontWeight: "bold"}}>Онлайн калькуляторы</h1>
                           <div style={{textAlign: "justify"}}>
                             <p>OMMAT.ru - бесплатный сервис онлайн-калькуляторов. С помощью нашего сервиса Вы сможете без регистрации и прочих проверок быстро и точно произвести необходимые вычисления. Мы постоянно работаем над улучшением предоставляемого Вам сервиса и созданием новых калькуляторов, чтобы каждый пользователь смог оперативно и максимально точно произвести нужные расчеты. Мы прилагаем много усилий для улучшения нашего сервиса и искренне надеемся, что с помощью представленных онлайн-калькуляторов Вы смогли решить поставленные перед Вами задачи. Если Вам понравился наш сервис онлайн-калькуляторов, то добавляйте его в закладки и расскажите про него друзьям через Вашу социальную сеть.</p>
                           </div>
@@ -85,19 +85,6 @@ export const Home = () => {
                       {algorithmsCards === "" && (<p>Готовим калькуляторы...</p>)}
                       {algorithmsCards !== "" && algorithmsCards}
                   </Box>
-              </div>
-              <div>
-                  <Container style={{marginTop: "40px", paddingRight: "0px"}}>
-                      <Box sx={{ bgcolor: "#F6F6F6", padding: "15px"}}>
-                          <h1 style={{fontWeight: "bold", textAlign: "center"}}>Простой калькулятор</h1>
-                          <div style={{textAlign: "center"}}>
-                              <p>Очень простой калькулятор - ничего лишнего: сложение, вычитание, умножение деление</p>
-                          </div>
-                          <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                              <img src={calculatorImg} alt="Простой калькулятор"/>
-                          </div>
-                      </Box>
-                  </Container>
               </div>
               <div style={{textAlign: "right", marginTop: "40px", marginBottom: "20px"}}>
                   <p>Поделиться страницей в социальных сетях:</p>
