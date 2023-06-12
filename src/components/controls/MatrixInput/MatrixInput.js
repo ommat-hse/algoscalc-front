@@ -47,7 +47,7 @@ const MatrixInput = ({ description, title, isDisabeld, value, isFullWidth, isReq
             for (let j = 0; j < column; j++) {
                 rows.push(
                     <div style={{width: "65px", marginRight: "4px"}} key={`${id}-${i}-${j}-field`}>
-                        <TextField variant="outlined" size="small" id={`${id}-${i}-${j}-field`} name={data_shape} inputProps={{min: 0, style: { textAlign: 'center' }}} />
+                        <TextField variant="outlined" size="small" id={`${id}-${i}-${j}-field`} name={data_type + `|` + data_shape} inputProps={{min: 0, style: { textAlign: 'center' }}} />
                     </div>
                 );
             }
@@ -72,13 +72,13 @@ const MatrixInput = ({ description, title, isDisabeld, value, isFullWidth, isReq
                     <Box sx={{ border: 1, borderRadius: 5, padding: "5px", display: "inline-block" }}>
                         <div style={{display: "flex"}}>
                             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="select-row-label">Строки</InputLabel>
+                                <InputLabel id={`${id}-select-row-label`}>Строки</InputLabel>
                                 <Select
                                 labelId="select-row-label"
-                                id="select-row"
+                                id={`${id}-select-row`}
                                 value={row}
                                 onChange={handleChangeRow}
-                                name={id}
+                                name={`${id}-matrix`}
                                 >
                                     <MenuItem value={1}>1</MenuItem>
                                     <MenuItem value={2}>2</MenuItem>
@@ -93,13 +93,13 @@ const MatrixInput = ({ description, title, isDisabeld, value, isFullWidth, isReq
                             </FormControl>
                             <div style={{fontWeight: "700", fontSize: "20px", marginTop: "20px"}}>X</div>
                             <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-                                <InputLabel id="select-column-label">Столбцы</InputLabel>
+                                <InputLabel id={`${id}-select-column-label`}>Столбцы</InputLabel>
                                 <Select
                                 labelId="select-column-label"
-                                id="select-column"
+                                id={`${id}-select-column`}
                                 value={column}
                                 onChange={handleChangeColumn}
-                                name={id}
+                                name={`${id}-matrix`}
                                 >
                                     <MenuItem value={1}>1</MenuItem>
                                     <MenuItem value={2}>2</MenuItem>
@@ -122,6 +122,7 @@ const MatrixInput = ({ description, title, isDisabeld, value, isFullWidth, isReq
             {isOutputMatrix && (
                 <>
                     <div style={{fontWeight: "700"}}>{description}</div>
+                    <div id={`${id}-matrix`} />
                 </>
             )}
         </>
