@@ -17,15 +17,17 @@ export const NavMenu = () => {
         className="navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3"
         style={{ backgroundColor: "#1B294F", color: "#FFFFFF" }}
       >
-        <img src={mainLogo} alt="OMMAT" width="60" height="60" />
+        <img src={mainLogo} alt="OMMAT" width="60" height="60" onClick={() => {window.location.href = "#";}} />
         <NavbarBrand
           style={{
             color: "#FFFFFF",
             fontWeight: "bold",
             paddingLeft: "10px",
             fontSize: "22px",
-            marginRight: "auto"
+            marginRight: "auto",
+            cursor: "pointer"
           }}
+          onClick={() => {window.location.href = "#";}}
         >
             { prodLink === "prod.ommat.ru" ? "Онлайн калькулятор" : "Онлайн калькулятор (тест)" }
         </NavbarBrand>
