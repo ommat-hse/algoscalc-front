@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  fronttest:
+  front_test:
     container_name: FrontTest
     restart: always
     build:
