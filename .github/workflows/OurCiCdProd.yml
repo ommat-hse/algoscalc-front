@@ -1,6 +1,6 @@
 name: "OMMAT CiCd Prod"
 on:
-  pull_request:
+  push:
     branches: ["Prod"]
     
 jobs:
