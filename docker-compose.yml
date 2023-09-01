@@ -3,15 +3,12 @@ version: '3.7'
 services:
 
   fronttest:
-    container_name: FrontTest
+    container_name: FrontTest_23_1
     restart: always
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
     ports:
-      - 4444:44486
+      - '4443:44486'
     environment:
       - CHOKIDAR_USEPOLLING=true
