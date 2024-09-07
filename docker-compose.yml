@@ -10,5 +10,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - 4444:44486
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+    networks:
+      nginx_net1:
+        ipv4_address: 172.77.0.2
+
+networks:
+  nginx_net1:
+    external:
+      name: nginx-net
