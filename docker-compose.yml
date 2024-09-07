@@ -10,7 +10,6 @@ services:
       dockerfile: Dockerfile
     networks:
       nginx_net1:
-        ipv4_address: 172.77.0.2
 
 networks:
   nginx_net1:
