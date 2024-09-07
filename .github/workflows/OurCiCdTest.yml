@@ -11,16 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote ssh commands
-      uses: appleboy/ssh-action@v0.1.9
+      uses: fjogeleit/http-request-action@v1.16.1
       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-            cd ${{ secrets.PROJECT_FOLDER }};
-            echo ${{ secrets.SECRET_PHRASE }} | sudo -S git checkout Test;
-            echo ${{ secrets.SECRET_PHRASE }} | sudo -S git pull;
-            echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker-compose --file docker-compose.yml down;
-            echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker-compose --file docker-compose.yml up -d --build;
-            echo ${{ secrets.SECRET_PHRASE }} | sudo -S docker system prune --all --force;
+        url: ${{ secrets.URL_WEBHOOK }}
+        method: 'POST'
