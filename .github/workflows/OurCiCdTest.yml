@@ -13,5 +13,5 @@ jobs:
     - name: executing remote ssh commands
       uses: fjogeleit/http-request-action@v1.16.1
       with:
-        url: ${{ secrets.URL_WEBHOOK }}
+        url: ${{ secrets.URL_WEBHOOK_TEST }}
         method: 'POST'
