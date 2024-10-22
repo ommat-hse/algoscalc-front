@@ -33,10 +33,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Download coverage report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -97,6 +93,7 @@ jobs:
   prod_deploy:
     name: Deploy Front Prod
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
     - name: executing remote ssh commands
       uses: fjogeleit/http-request-action@v1.16.1
