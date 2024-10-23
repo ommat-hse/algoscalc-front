@@ -24,7 +24,7 @@ export function parseValue(
   }
 }
 
-export function parseScalarValue(value: String, dataType: DataTypeEnum) {
+export function parseScalarValue(value: string, dataType: DataTypeEnum) {
   if (value === null || value === undefined) {
     throw new ParseError("Значение не задано");
   }
@@ -70,7 +70,7 @@ export function parseScalarValue(value: String, dataType: DataTypeEnum) {
   }
 }
 
-export function parseListValue(value: String, dataType: DataTypeEnum) {
+export function parseListValue(value: string, dataType: DataTypeEnum) {
   const list = [];
   let num = 1;
   for (const item of value.replace(" ", "").split(",")) {
@@ -88,7 +88,7 @@ export function parseListValue(value: String, dataType: DataTypeEnum) {
 }
 
 export function parseMatrixValue(
-  value: Array<String[]>,
+  value: Array<string[]>,
   dataType: DataTypeEnum,
 ) {
   const matrix = [];

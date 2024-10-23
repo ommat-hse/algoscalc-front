@@ -3,7 +3,7 @@ import config from "../config";
 import { IAlgorithm, IAlgorithmData, IBaseEntity } from "./algorithm.interface";
 import { AppError } from "../errors";
 
-const algoApiUrl = `${config.apiUrl || config.appHost}/api/algorithms/`;
+const algoApiUrl = `${config.apiUrl ?? config.appHost}/api/algorithms/`;
 
 export const getAlgorithms = async (): Promise<IBaseEntity[]> => {
   const res = await axios.get(algoApiUrl);

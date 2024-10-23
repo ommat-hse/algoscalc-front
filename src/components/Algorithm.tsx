@@ -127,12 +127,12 @@ export const Algorithm = () => {
           result.outputs.map((x: IOutput) => {
             if (x.data_shape === DataShapeEnum.MATRIX) {
               return (
-                  <Tooltip title={x.description} arrow placement="left">
-                    <div>
-                      <div style={{ fontWeight: "700" }}>{x.title}</div>
-                      <div id={x.name} />
-                    </div>
-                  </Tooltip>
+                <Tooltip title={x.description} arrow placement="left" key={x.name}>
+                  <div>
+                    <div style={{ fontWeight: "700" }}>{x.title}</div>
+                    <div id={x.name} />
+                  </div>
+                </Tooltip>
               );
             } else if (x.data_type === DataTypeEnum.BOOL) {
               return (

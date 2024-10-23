@@ -29,17 +29,15 @@ const Matrix: React.FC<MatrixProps> = ({
   }
 
   return (
-    <>
-      <div id={`${id}-completed`}>
-        {rows.map((row, rowIdx) => {
-          return (
-            <MatrixRow id={id} rowIdx={rowIdx} key={`${id}-${rowIdx}-row`}>
-              {row}
-            </MatrixRow>
-          );
-        })}
-    </div>
-    </>
+    <div id={`${id}-completed`}>
+      {rows.map((row, rowIdx) => {
+        return (
+          <MatrixRow id={id} rowIdx={rowIdx} key={`${id}-${rowIdx}-row`}>
+            {row}
+          </MatrixRow>
+        );
+      })}
+  </div>
   );
 };
 
