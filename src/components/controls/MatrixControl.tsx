@@ -41,7 +41,7 @@ const MatrixControl: React.FC<MatrixControlProps> = ({
     setMatrixElements(
       rows.map((row, rowIdx) => {
         return (
-          <MatrixRow id={id} rowIdx={rowIdx}>
+          <MatrixRow id={id} rowIdx={rowIdx} key={`${id}-${rowIdx}-row`}>
             {row}
           </MatrixRow>
         );
@@ -50,55 +50,53 @@ const MatrixControl: React.FC<MatrixControlProps> = ({
   }, [rowCnt, colCnt]);
 
   return (
-    <>
-      <Tooltip title={description} arrow placement="left">
-        <div>
-          <div style={{ fontWeight: "700", marginTop: "5px" }}>{title}</div>
-          <div style={{ display: "flex" }}>
-            <div>
-              <div style={{ fontWeight: "700", marginTop: "5px" }}>
-                Размер матрицы
-              </div>
-              <Box
-                sx={{
-                  border: 1,
-                  borderRadius: 5,
-                  padding: "5px",
-                  display: "inline-block",
-                }}
-              >
-                <div style={{ display: "flex" }}>
-                  <SelectControl
-                    id={`${id}-select-row`}
-                    labelText="Строки"
-                    value={rowCnt}
-                    callback={handleChangeRow}
-                  />
-                  <div
-                    style={{
-                      fontWeight: "700",
-                      fontSize: "20px",
-                      marginTop: "20px",
-                    }}
-                  >
-                    X
-                  </div>
-                  <SelectControl
-                    id={`${id}-select-column`}
-                    labelText="Столбцы"
-                    value={colCnt}
-                    callback={handleChangeColumn}
-                  />
+    <Tooltip title={description} arrow placement="left">
+      <div>
+        <div style={{ fontWeight: "700", marginTop: "5px" }}>{title}</div>
+        <div style={{ display: "flex" }}>
+          <div>
+            <div style={{ fontWeight: "700", marginTop: "5px" }}>
+              Размер матрицы
+            </div>
+            <Box
+              sx={{
+                border: 1,
+                borderRadius: 5,
+                padding: "5px",
+                display: "inline-block",
+              }}
+            >
+              <div style={{ display: "flex" }}>
+                <SelectControl
+                  id={`${id}-select-row`}
+                  labelText="Строки"
+                  value={rowCnt}
+                  callback={handleChangeRow}
+                />
+                <div
+                  style={{
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    marginTop: "20px",
+                  }}
+                >
+                  X
                 </div>
-              </Box>
-            </div>
-            <div style={{ marginTop: "25px", marginLeft: "10px" }}>
-              {matrixElements}
-            </div>
+                <SelectControl
+                  id={`${id}-select-column`}
+                  labelText="Столбцы"
+                  value={colCnt}
+                  callback={handleChangeColumn}
+                />
+              </div>
+            </Box>
+          </div>
+          <div style={{ marginTop: "25px", marginLeft: "10px" }}>
+            {matrixElements}
           </div>
         </div>
-      </Tooltip>
-    </>
+      </div>
+    </Tooltip>
   );
 };
 

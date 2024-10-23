@@ -18,22 +18,20 @@ const BoolControl: React.FC<BoolControlProps> = ({
   disabled,
 }: BoolControlProps) => {
   return (
-    <>
-      <Tooltip title={description} arrow placement="left">
-        <FormControlLabel
-          control={
-            <input
-              id={id}
-              type="checkbox"
-              checked={checked}
-              disabled={disabled}
-              style={{ margin: "0.4rem" }}
-            />
-          }
-          label={title}
-        />
-      </Tooltip>
-    </>
+    <Tooltip title={description} arrow placement="left">
+      <FormControlLabel
+        control={
+          <input
+            id={id}
+            type="checkbox"
+            checked={checked}
+            disabled={disabled}
+            style={{ margin: "0.4rem" }}
+          />
+        }
+        label={title}
+      />
+    </Tooltip>
   );
 };
 

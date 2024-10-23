@@ -24,9 +24,6 @@ const Header: React.FC = () => {
             alt="OMMAT"
             width="60"
             height="60"
-            onClick={() => {
-              window.location.href = "#";
-            }}
           />
           <NavbarBrand
             style={{

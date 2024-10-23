@@ -25,9 +25,8 @@ import ShareBlock from "./ShareBlock";
 import { Navigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { AppError, ParseError } from "../errors";
-import MatrixItem from "./controls/MatrixItem";
-import MatrixRow from "./controls/MatrixRow";
 import { parseValue } from "../utils/parse-value.util";
+import Matrix from "./Matrix";
 
 export const Algorithm = () => {
   const [openLoadWheal, setOpenLoadWheal] = React.useState(false);
@@ -37,7 +36,7 @@ export const Algorithm = () => {
   const [modalTitle, setModalTitle] = React.useState("");
 
   const queryParameters = new URLSearchParams(window.location.search);
-  const algoName: string = queryParameters.get("alg") || "";
+  const algoName: string = queryParameters.get("alg") ?? "";
 
   const [redirectToHome, setRedirectToHome] = React.useState(false);
 
@@ -55,6 +54,17 @@ export const Algorithm = () => {
       parameters: [],
       outputs: [],
     });
+  const getAlgorithmDefinitionOutput = (name: string) => {
+    const outputs = algorithmDefinition.outputs.filter(
+      (output) => output.name === name,
+    );
+    if (!outputs || outputs.length === 0) {
+      throw new AppError(
+        `Не найден элемент выходных данных [${name}]`,
+      );
+    }
+    return outputs[0];
+  }
 
   const handleError = (message: string, goHome = false) => {
     setOpenLoadWheal(false);
@@ -64,7 +74,7 @@ export const Algorithm = () => {
     setOpenDialogModal(!openDialogModal);
   };
 
-  const redirectToHomePage = (home: Boolean) => {
+  const redirectToHomePage = (home: boolean) => {
     if (home) {
       setRedirectToHome(true);
     }
@@ -117,14 +127,12 @@ export const Algorithm = () => {
           result.outputs.map((x: IOutput) => {
             if (x.data_shape === DataShapeEnum.MATRIX) {
               return (
-                <>
                   <Tooltip title={x.description} arrow placement="left">
                     <div>
                       <div style={{ fontWeight: "700" }}>{x.title}</div>
                       <div id={x.name} />
                     </div>
                   </Tooltip>
-                </>
               );
             } else if (x.data_type === DataTypeEnum.BOOL) {
               return (
@@ -170,31 +178,7 @@ export const Algorithm = () => {
     for (const parameter of algorithmDefinition.parameters) {
       let paramValue: any;
       if (parameter.data_shape === DataShapeEnum.MATRIX) {
-        const colCnt = Number(
-          getValueByElementId(
-            `${parameter.name}-select-column`,
-            `Не найден размер для матрицы [${parameter.title}]`,
-          ),
-        );
-        const rowCnt = Number(
-          getValueByElementId(
-            `${parameter.name}-select-row`,
-            `Не найден размер для матрицы [${parameter.title}]`,
-          ),
-        );
-        paramValue = [];
-        for (let rowIdx = 0; rowIdx < rowCnt; rowIdx++) {
-          const row = [];
-          for (let colIdx = 0; colIdx < colCnt; colIdx++) {
-            row.push(
-              getValueByElementId(
-                `${parameter.name}-${rowIdx}-${colIdx}`,
-                `Не найден элемент [${rowIdx}, ${colIdx}] для матрицы [${parameter.title}]`,
-              ),
-            );
-          }
-          paramValue.push(row);
-        }
+        paramValue = getMatrixValue(parameter);
       } else if (
         parameter.data_shape === DataShapeEnum.SCALAR &&
         parameter.data_type === DataTypeEnum.BOOL
@@ -233,38 +217,13 @@ export const Algorithm = () => {
     getAlgorithmResult(algoName, parameters)
       .then((res) => {
         for (const resultOutput of res) {
-          const outputs = algorithmDefinition.outputs.filter(
-            (output) => output.name === resultOutput.name,
-          );
-          if (!outputs || outputs.length === 0) {
-            throw new AppError(
-              `Не найден элемент выходных данных [${resultOutput.name}]`,
-            );
-          }
-          const output = outputs[0];
+          const output = getAlgorithmDefinitionOutput(resultOutput.name);
           const outputElement = getElementById(
             output.name,
             `Не найден элемент выходных данных для [${output.title}]`,
           );
 
           if (output.data_shape === DataShapeEnum.MATRIX) {
-            const rowCnt = resultOutput.value.length;
-            const colCnt = rowCnt > 0 ? resultOutput.value[0].length : 0;
-
-            let rows = [];
-            for (let i = 0; i < rowCnt; i++) {
-              let row = [];
-              for (let j = 0; j < colCnt; j++) {
-                row.push(
-                  <MatrixItem
-                    id={`${output.name}-${i}-${j}`}
-                    value={resultOutput.value[i][j]}
-                  />,
-                );
-              }
-              rows.push(row);
-            }
-
             const completedMatrixId = `${output.name}-completed`;
             const completedMatrixElement =
               document.getElementById(completedMatrixId);
@@ -273,15 +232,7 @@ export const Algorithm = () => {
             }
 
             ReactDOM.createRoot(outputElement).render(
-              <div id={completedMatrixId}>
-                {rows.map((row, rowIdx) => {
-                  return (
-                    <MatrixRow id={output.name} rowIdx={rowIdx}>
-                      {row}
-                    </MatrixRow>
-                  );
-                })}
-              </div>,
+              <Matrix id={output.name} value={resultOutput.value}/>
             );
           } else if (
             output.data_shape === DataShapeEnum.SCALAR &&
@@ -411,3 +362,33 @@ const getElementById = (id: string, errorMessage: string = ""): HTMLElement => {
   }
   return element;
 };
+
+const getMatrixValue = (parameter: IParameter) => {
+  const matrixValue = [];
+  const colCnt = Number(
+    getValueByElementId(
+      `${parameter.name}-select-column`,
+      `Не найден размер для матрицы [${parameter.title}]`,
+    ),
+  );
+  const rowCnt = Number(
+    getValueByElementId(
+      `${parameter.name}-select-row`,
+      `Не найден размер для матрицы [${parameter.title}]`,
+    ),
+  );
+  
+  for (let rowIdx = 0; rowIdx < rowCnt; rowIdx++) {
+    const row = [];
+    for (let colIdx = 0; colIdx < colCnt; colIdx++) {
+      row.push(
+        getValueByElementId(
+          `${parameter.name}-${rowIdx}-${colIdx}`,
+          `Не найден элемент [${rowIdx}, ${colIdx}] для матрицы [${parameter.title}]`,
+        ),
+      );
+    }
+    matrixValue.push(row);
+  }
+  return matrixValue;
+}

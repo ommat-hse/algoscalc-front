@@ -18,23 +18,21 @@ const SelectControl: React.FC<SelectControlProps> = ({
   callback,
 }: SelectControlProps) => {
   const menuItems = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((val) => {
-    return <MenuItem value={val}>{val}</MenuItem>;
+    return <MenuItem value={val} key={`${id}-{val}-value`}>{val}</MenuItem>;
   });
 
   return (
-    <>
-      <FormControl variant="filled" sx={{ m: 1, minWidth: 80 }}>
-        <InputLabel id={`${id}-label`}>{labelText}</InputLabel>
-        <Select
-          labelId="select-label"
-          value={value}
-          onChange={callback}
-          inputProps={{ id: id }}
-        >
-          {menuItems}
-        </Select>
-      </FormControl>
-    </>
+    <FormControl variant="filled" sx={{ m: 1, minWidth: 80 }}>
+      <InputLabel id={`${id}-label`}>{labelText}</InputLabel>
+      <Select
+        labelId="select-label"
+        value={value}
+        onChange={callback}
+        inputProps={{ id: id }}
+      >
+        {menuItems}
+      </Select>
+    </FormControl>
   );
 };
 

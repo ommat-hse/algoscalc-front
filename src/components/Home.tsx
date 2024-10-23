@@ -16,6 +16,36 @@ const Home: React.FC = () => {
     window.location.href = link;
   };
 
+  const getCards = (algorithms: IBaseEntity[]) => {
+    return algorithms.map((x: IBaseEntity) => (
+      <Container
+        key={`card-alg-${x.name}`}
+        style={{
+          display: "flex",
+          cursor: "pointer",
+        }}
+        onClick={() => handleClickOnCard(`/algorithm?alg=${x.name}`)}
+      >
+        <Box
+          sx={{
+            bgcolor: "#F6F6F6",
+            padding: "15px",
+            border: 1,
+            width: "300px",
+            height: "200px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <p style={{ fontWeight: "bold", textAlign: "center" }}>
+            {x.title}
+          </p>
+        </Box>
+      </Container>
+    ));
+  };
+
   const updateAlgorithms = () => {
     getAlgorithms()
       .then((res) => {
@@ -23,35 +53,7 @@ const Home: React.FC = () => {
         for (let i = 0; i < res.length && i < 9; i++) {
           arrNineCards.push(res[i]);
         }
-        setAlgorithmsCards(
-          arrNineCards.map((x: IBaseEntity) => (
-            <Container
-              key={`card-alg-${x.name}`}
-              style={{
-                display: "flex",
-                cursor: "pointer",
-              }}
-              onClick={() => handleClickOnCard(`/algorithm?alg=${x.name}`)}
-            >
-              <Box
-                sx={{
-                  bgcolor: "#F6F6F6",
-                  padding: "15px",
-                  border: 1,
-                  width: "300px",
-                  height: "200px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <p style={{ fontWeight: "bold", textAlign: "center" }}>
-                  {x.title}
-                </p>
-              </Box>
-            </Container>
-          )),
-        );
+        setAlgorithmsCards(getCards(arrNineCards));
       })
       .catch((error) => {
         alert(error);

@@ -8,9 +8,7 @@ const algoApiUrl = `${config.apiUrl || config.appHost}/api/algorithms/`;
 export const getAlgorithms = async (): Promise<IBaseEntity[]> => {
   const res = await axios.get(algoApiUrl);
   if (
-    !res ||
-    !res.data ||
-    !(res.data instanceof Array) ||
+    !(res?.data instanceof Array) ||
     res.data.length === 0
   ) {
     throw new AppError("Ошибка получения списка алгоритмов");
@@ -23,7 +21,7 @@ export const getAlgorithmDescription = async (
   algorithm: string,
 ): Promise<IAlgorithm> => {
   const res = await axios.get(algoApiUrl + algorithm);
-  if (!res || !res.data) {
+  if (!res?.data) {
     throw new AppError("Ошибка получения описания алгоритма");
   }
   if (res.data.errors) {
@@ -51,7 +49,7 @@ export const getAlgorithmResult = async (
     throw error;
   }
 
-  if (!res || !res.data) {
+  if (!res?.data) {
     throw new AppError("Ошибка получения результата выполнения алгоритма");
   }
   if (res.data.errors) {
@@ -61,8 +59,7 @@ export const getAlgorithmResult = async (
     );
   }
   if (
-    !res.data.result?.outputs ||
-    !(res.data.result.outputs instanceof Array) ||
+    !(res.data.result?.outputs instanceof Array) ||
     res.data.result.outputs.length === 0
   ) {
     throw new AppError("Ошибка получения результата выполнения алгоритма");

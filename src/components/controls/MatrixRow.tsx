@@ -12,14 +12,12 @@ const MatrixRow: React.FC<MatrixRowProps> = ({
   children,
 }: MatrixRowProps) => {
   return (
-    <>
-      <div
-        style={{ display: "-webkit-box", marginTop: "4px" }}
-        key={`${id}-${rowIdx}-row`}
-      >
-        {children}
-      </div>
-    </>
+    <div
+      style={{ display: "-webkit-box", marginTop: "4px" }}
+      key={`${id}-${rowIdx}-row`}
+    >
+      {children}
+    </div>
   );
 };
 
