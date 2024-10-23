@@ -27,7 +27,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { AppError, ParseError } from "../errors";
 import MatrixItem from "./controls/MatrixItem";
 import MatrixRow from "./controls/MatrixRow";
-import { parseValue } from "../utils/parse-value";
+import { parseValue } from "../utils/parse-value.util";
 
 export const Algorithm = () => {
   const [openLoadWheal, setOpenLoadWheal] = React.useState(false);

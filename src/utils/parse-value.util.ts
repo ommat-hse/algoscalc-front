@@ -40,7 +40,7 @@ export function parseScalarValue(value: String, dataType: DataTypeEnum) {
   value = value.trim();
 
   if (dataType === DataTypeEnum.FLOAT) {
-    if (!value.match(/^[-+]?[0-9]*\.?[0-9]*$/)) {
+    if (!value.match(/^[+-]?\d+(\.\d+)?$/)) {
       throw new ParseError(
         `Значение [${value}] не соответствует формату действительного числа`,
       );
@@ -50,7 +50,7 @@ export function parseScalarValue(value: String, dataType: DataTypeEnum) {
   }
 
   if (dataType === DataTypeEnum.INT) {
-    if (!value.match(/^[-+]?[0-9]*$/)) {
+    if (!value.match(/^[-+]?\d+$/)) {
       throw new ParseError(
         `Значение [${value}] не соответствует формату целого числа`,
       );
