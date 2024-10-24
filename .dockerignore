@@ -5,3 +5,4 @@ Dockerfile
 docker-compose*
 *.md 
 sonar-project.properties
+.env.local
