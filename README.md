@@ -16,9 +16,10 @@
 
 Запустить приложение можно командой:
 
-    ```sh
-    docker compose -f docker-compose.local.yml up
-    ```
+```sh
+docker compose -f docker-compose.local.yml up
+```
+    
 Запущенное приложение доступно в браузере по адресу http://localhost:3000
 
 ## Установка и запуск приложения локально
