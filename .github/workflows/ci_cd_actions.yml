@@ -60,7 +60,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_REACT_APP_ENVIRONMENT: "staging"
-          envkey_REACT_APP_VERSION: ${{ steps.get_short_sha.outputs.SHORT_SHA }}
+          envkey_REACT_APP_VERSION: "Test-${{ steps.get_short_sha.outputs.SHORT_SHA }}""
           file_name: .env
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
