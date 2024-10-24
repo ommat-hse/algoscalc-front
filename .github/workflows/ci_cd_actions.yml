@@ -53,6 +53,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get the version
+        id: get_short_sha
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_REACT_APP_ENVIRONMENT: "staging"
+          envkey_REACT_APP_VERSION: ${{ steps.get_short_sha.outputs.SHORT_SHA }}
+          file_name: .env
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
@@ -69,9 +78,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Get the version
-        id: get_short_sha
-        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
       - name: deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -84,8 +90,6 @@ jobs:
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test;
             docker rm -f ${{ env.TEST_CONTAINER_NAME }} || true;
             docker run -d \
-              -e REACT_APP_ENVIRONMENT=staging \
-              -e REACT_APP_VERSION=test-${{ steps.get_short_sha.outputs.SHORT_SHA }} \
               --restart=always \
               --name ${{ env.TEST_CONTAINER_NAME }} \
               --network ${{ secrets.SANDBOX_NETWORK }} \
