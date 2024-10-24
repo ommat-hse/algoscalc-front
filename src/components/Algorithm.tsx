@@ -36,7 +36,7 @@ export const Algorithm = () => {
   const [modalTitle, setModalTitle] = React.useState("");
 
   const queryParameters = new URLSearchParams(window.location.search);
-  const algoName: string = queryParameters.get("alg") ?? "";
+  const algoName: string = queryParameters.get("name") ?? "";
 
   const [redirectToHome, setRedirectToHome] = React.useState(false);
 
@@ -258,8 +258,8 @@ export const Algorithm = () => {
       });
   };
 
-  const telegramUrl = `${config.appHost}/algorithm?alg=${algoName}&text=Онлайн калькуляторы OMMAT.ru - ${algorithmDefinition.title}`;
-  const vkUrl = `${config.appHost}/algorithm?alg=${algoName}&title=Онлайн калькуляторы OMMAT.ru - ${algorithmDefinition.title}&noparse=true&image=${config.appHost}${ourLogo}`;
+  const telegramUrl = `${config.appHost}/algorithm?name=${algoName}&text=Онлайн калькуляторы OMMAT.ru - ${algorithmDefinition.title}`;
+  const vkUrl = `${config.appHost}/algorithm?name=${algoName}&title=Онлайн калькуляторы OMMAT.ru - ${algorithmDefinition.title}&noparse=true&image=${config.appHost}${ourLogo}`;
 
   return (
     <>

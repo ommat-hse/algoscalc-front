@@ -15,8 +15,7 @@ const Footer: React.FC = () => {
       >
         © 2024 OMMAT |
         <Link href="mailto:support@ommat.ru" underline="none" color="inherit">
-          {" "}
-          обратная связь
+          &nbsp; обратная связь &nbsp;
         </Link>
         | Версия: {config.version}
       </div>

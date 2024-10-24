@@ -16,7 +16,7 @@ const SideBar: React.FC = () => {
           res.map((x: IBaseEntity) => (
             <p key={`alg-${x.name}`}>
               <Link
-                href={`/algorithm?alg=${x.name}`}
+                href={`/algorithm?name=${x.name}`}
                 underline="hover"
                 color="#46484D"
                 id={`alg-${x.name}`}

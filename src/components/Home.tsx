@@ -24,7 +24,7 @@ const Home: React.FC = () => {
           display: "flex",
           cursor: "pointer",
         }}
-        onClick={() => handleClickOnCard(`/algorithm?alg=${x.name}`)}
+        onClick={() => handleClickOnCard(`/algorithm?name=${x.name}`)}
       >
         <Box
           sx={{
