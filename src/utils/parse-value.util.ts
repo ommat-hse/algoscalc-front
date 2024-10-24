@@ -40,17 +40,17 @@ export function parseScalarValue(value: string, dataType: DataTypeEnum) {
   value = value.trim();
 
   if (dataType === DataTypeEnum.FLOAT) {
-    if (!value.match(/^[+-]?\d+(\.\d+)?$/)) {
+    if (!/^[+-]?\d+(\.\d+)?$/.exec(value)) {
       throw new ParseError(
         `Значение [${value}] не соответствует формату действительного числа`,
       );
     }
 
-    return parseFloat(value as string);
+    return parseFloat(value);
   }
 
   if (dataType === DataTypeEnum.INT) {
-    if (!value.match(/^[-+]?\d+$/)) {
+    if (!/^[-+]?\d+$/.exec(value)) {
       throw new ParseError(
         `Значение [${value}] не соответствует формату целого числа`,
       );
@@ -60,13 +60,13 @@ export function parseScalarValue(value: string, dataType: DataTypeEnum) {
   }
 
   if (dataType === DataTypeEnum.BOOL) {
-    if (!value.match(/^(true|false|0|1)$/i)) {
+    if (!/^(true|false|0|1)$/i.exec(value)) {
       throw new ParseError(
         `Значение [${value}] не соответствует логическому формату`,
       );
     }
 
-    return /^(true|1)$/i.test(value as string);
+    return /^(true|1)$/i.test(value);
   }
 }
 

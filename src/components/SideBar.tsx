@@ -45,11 +45,14 @@ const SideBar: React.FC = () => {
           marginTop: "5px",
           marginBottom: "10px",
         }}
-        onClick={() => {
-          window.location.href = "/";
-        }}
       >
-        Главная
+        <Link
+          href={"/"}
+          underline="hover"
+          color="#46484D"
+        >
+          Главная
+        </Link>
       </h2>
       <Divider />
       <div style={{ marginRight: "10px" }}>
