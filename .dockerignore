@@ -2,4 +2,6 @@ node_modules
 build
 .dockerignore
 Dockerfile
-Dockerfile.prod
+docker-compose*
+*.md 
+sonar-project.properties
