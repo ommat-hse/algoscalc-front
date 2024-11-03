@@ -9,6 +9,8 @@ import {
   IOutput,
   IAlgorithm,
   IAlgorithmData,
+  DataTypeEnum,
+  DataShapeEnum,
 } from "../api";
 import ourLogo from "../assets/images/logo.png";
 import Button from "@mui/material/Button";
@@ -19,8 +21,6 @@ import MatrixControl from "./controls/MatrixControl";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 import config from "../config";
-import { DataTypeEnum } from "../api/data-type.enum";
-import { DataShapeEnum } from "../api/data-shape.enum";
 import ShareBlock from "./ShareBlock";
 import { Navigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
@@ -59,12 +59,10 @@ export const Algorithm = () => {
       (output) => output.name === name,
     );
     if (!outputs || outputs.length === 0) {
-      throw new AppError(
-        `Не найден элемент выходных данных [${name}]`,
-      );
+      throw new AppError(`Не найден элемент выходных данных [${name}]`);
     }
     return outputs[0];
-  }
+  };
 
   const handleError = (message: string, goHome = false) => {
     setOpenLoadWheal(false);
@@ -127,7 +125,12 @@ export const Algorithm = () => {
           result.outputs.map((x: IOutput) => {
             if (x.data_shape === DataShapeEnum.MATRIX) {
               return (
-                <Tooltip title={x.description} arrow placement="left" key={x.name}>
+                <Tooltip
+                  title={x.description}
+                  arrow
+                  placement="left"
+                  key={x.name}
+                >
                   <div>
                     <div style={{ fontWeight: "700" }}>{x.title}</div>
                     <div id={x.name} />
@@ -232,7 +235,7 @@ export const Algorithm = () => {
             }
 
             ReactDOM.createRoot(outputElement).render(
-              <Matrix id={output.name} value={resultOutput.value}/>
+              <Matrix id={output.name} value={resultOutput.value} />,
             );
           } else if (
             output.data_shape === DataShapeEnum.SCALAR &&
@@ -377,7 +380,7 @@ const getMatrixValue = (parameter: IParameter) => {
       `Не найден размер для матрицы [${parameter.title}]`,
     ),
   );
-  
+
   for (let rowIdx = 0; rowIdx < rowCnt; rowIdx++) {
     const row = [];
     for (let colIdx = 0; colIdx < colCnt; colIdx++) {
@@ -391,4 +394,4 @@ const getMatrixValue = (parameter: IParameter) => {
     matrixValue.push(row);
   }
   return matrixValue;
-}
+};

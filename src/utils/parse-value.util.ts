@@ -25,7 +25,7 @@ export function parseValue(
 }
 
 export function parseScalarValue(value: string, dataType: DataTypeEnum) {
-  if (value === null || value === undefined) {
+  if (value === null || value === undefined || value === "") {
     throw new ParseError("Значение не задано");
   }
   value = String(value);
