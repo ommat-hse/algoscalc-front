@@ -7,10 +7,7 @@ const algoApiUrl = `${config.apiUrl ?? config.appHost}/api/algorithms/`;
 
 export const getAlgorithms = async (): Promise<IBaseEntity[]> => {
   const res = await axios.get(algoApiUrl);
-  if (
-    !(res?.data instanceof Array) ||
-    res.data.length === 0
-  ) {
+  if (!(res?.data instanceof Array) || res.data.length === 0) {
     throw new AppError("Ошибка получения списка алгоритмов");
   }
 
@@ -20,50 +17,42 @@ export const getAlgorithms = async (): Promise<IBaseEntity[]> => {
 export const getAlgorithmDescription = async (
   algorithm: string,
 ): Promise<IAlgorithm> => {
-  const res = await axios.get(algoApiUrl + algorithm);
-  if (!res?.data) {
-    throw new AppError("Ошибка получения описания алгоритма");
+  const defaultErrorMessage = "Ошибка получения описания алгоритма";
+  try {
+    const res = await axios.get(algoApiUrl + algorithm);
+    return res.data as IAlgorithm;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      let message = error.response?.data.detail || defaultErrorMessage;
+      throw new AppError(message, error.status === 404);
+    }
+    throw error;
   }
-  if (res.data.errors) {
-    throw new AppError(res.data.errors);
-  }
-
-  return res.data.result as IAlgorithm;
 };
 
 export const getAlgorithmResult = async (
   algorithm: string,
   data: IAlgorithmData[],
 ): Promise<IAlgorithmData[]> => {
+  const defaultErrorMessage =
+    "Ошибка получения результата выполнения алгоритма";
   let res;
   try {
-    res = await axios.post(algoApiUrl + algorithm, { parameters: data });
+    res = await axios.post(`${algoApiUrl}${algorithm}/results`, data);
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new AppError(
-        error.status === 422
-          ? "Некорректно заполнены входные данные"
-          : error.message,
-      );
+      let message = error.response?.data.detail || defaultErrorMessage;
+      if (error.status === 422) {
+        message = "Некорректно заполнены входные данные";
+      }
+      throw new AppError(message, error.status === 404);
     }
     throw error;
   }
 
-  if (!res?.data) {
-    throw new AppError("Ошибка получения результата выполнения алгоритма");
-  }
-  if (res.data.errors) {
-    throw new AppError(
-      res.data.errors,
-      res.data.errors.includes("Алгоритм с именем"),
-    );
-  }
-  if (
-    !(res.data.result?.outputs instanceof Array) ||
-    res.data.result.outputs.length === 0
-  ) {
-    throw new AppError("Ошибка получения результата выполнения алгоритма");
+  if (!(res.data instanceof Array) || res.data.length === 0) {
+    throw new AppError(defaultErrorMessage);
   }
 
-  return res.data.result.outputs as IAlgorithmData[];
+  return res.data as IAlgorithmData[];
 };
