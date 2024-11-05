@@ -13,7 +13,7 @@ const SideBar: React.FC = () => {
     getAlgorithms()
       .then((res) => {
         setAlgorithmsHaving(
-          res.map((x: IBaseEntity) => (
+          res.items.map((x: IBaseEntity) => (
             <p key={`alg-${x.name}`}>
               <Link
                 href={`/algorithm?name=${x.name}`}
