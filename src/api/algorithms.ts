@@ -1,17 +1,17 @@
 import axios, { AxiosError } from "axios";
 import config from "../config";
-import { IAlgorithm, IAlgorithmData, IBaseEntity } from "./algorithm.interface";
+import { IAlgorithm, IAlgorithmData, IAlgorithmsPage } from "./algorithm.interface";
 import { AppError } from "../errors";
 
 const algoApiUrl = `${config.apiUrl ?? config.appHost}/api/algorithms/`;
 
-export const getAlgorithms = async (): Promise<IBaseEntity[]> => {
-  const res = await axios.get(algoApiUrl);
-  if (!(res?.data instanceof Array) || res.data.length === 0) {
+export const getAlgorithms = async (page=1, size=50): Promise<IAlgorithmsPage> => {
+  const res = await axios.get(algoApiUrl, {params: {page: page, size: size}});
+  if (!(res?.data?.items instanceof Array) || res.data.items.length === 0) {
     throw new AppError("Ошибка получения списка алгоритмов");
   }
 
-  return res.data as IBaseEntity[];
+  return res.data as IAlgorithmsPage;
 };
 
 export const getAlgorithmDescription = async (

@@ -6,6 +6,13 @@ export interface IBaseEntity {
   title: string;
   description: string;
 }
+export interface IAlgorithmsPage {
+  items: IBaseEntity[];
+  total: number;
+  page: number;
+  size: number;
+  pages: number;
+}
 
 export interface IParameter extends IBaseEntity {
   data_type: DataTypeEnum;
