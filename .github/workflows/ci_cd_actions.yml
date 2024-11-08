@@ -4,14 +4,14 @@ on:
     tags:
       - 'v*'
     branches:
-      - Test
-      - Prod
+      - test
+      - main
     paths-ignore:
       - '**.md'
   pull_request:
     branches:
-      - Test
-      - Prod
+      - test
+      - main
     types: [opened, synchronize, reopened]
     paths-ignore:
       - '**.md'
@@ -21,8 +21,9 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  TEST_CONTAINER_NAME: FrontendTest
+  IMAGE_NAME: ghcr.io/${{ github.repository }}:${{ github.ref_name }} 
+  TEST_CONTAINER_NAME: algoscalc-front-test
+  PROD_CONTAINER_NAME: algoscalc-front-prod
 
 jobs:
   sonarcloud:
@@ -38,9 +39,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  build-test:
+  build:
+    name: Docker image build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/Test'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/test' || startsWith(github.ref, 'refs/tags/v'))
     permissions:
       contents: read
       packages: write
@@ -53,31 +55,43 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Get the version
-        id: get_short_sha
-        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Get build variables
+        id: get_variables
+        run: |
+          [ ${{ github.ref }} == refs/heads/test ] && \
+            echo "VERSION=Test-$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT" || 
+            echo "VERSION=${{ github.ref_name }}" >> "$GITHUB_OUTPUT";          
+          [ ${{ github.ref }} == refs/heads/test ] && \
+            echo "ENVIRONMENT=staging" >> "$GITHUB_OUTPUT" || 
+            echo "ENVIRONMENT=production" >> "$GITHUB_OUTPUT";
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_REACT_APP_ENVIRONMENT: "staging"
-          envkey_REACT_APP_VERSION: "Test-${{ steps.get_short_sha.outputs.SHORT_SHA }}"
+          envkey_REACT_APP_ENVIRONMENT: ${{ steps.get_variables.outputs.ENVIRONMENT }}
+          envkey_REACT_APP_VERSION: ${{ steps.get_variables.outputs.VERSION }}
           file_name: .env
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test 
-  deploy-test:
-    name: Test deploy
+          tags: ${{ env.IMAGE_NAME }}
+  deploy:
+    name: App deploy
     runs-on: ubuntu-latest
-    needs: build-test
-    if: needs.build-test.result == 'success'
+    needs: build
+    if: needs.build.result == 'success'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Get container name
+        id: get_container_name
+        run: |
+          [ ${{ github.ref }} == refs/heads/test ] && \
+            echo "CONTAINER_NAME=${{ env.TEST_CONTAINER_NAME }}" >> "$GITHUB_OUTPUT" || 
+            echo "CONTAINER_NAME=${{ env.PROD_CONTAINER_NAME }}" >> "$GITHUB_OUTPUT";     
       - name: deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -87,20 +101,10 @@ jobs:
           port: ${{ secrets.SANDBOX_PORT }}
           script: |
             docker logout;
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test;
-            docker rm -f ${{ env.TEST_CONTAINER_NAME }} || true;
+            docker pull ${{ env.IMAGE_NAME }};
+            docker rm -f ${{ steps.get_container_name.outputs.CONTAINER_NAME }} || true;
             docker run -d \
               --restart=always \
-              --name ${{ env.TEST_CONTAINER_NAME }} \
+              --name ${{ steps.get_container_name.outputs.CONTAINER_NAME }} \
               --network ${{ secrets.SANDBOX_NETWORK }} \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test;
-  prod_deploy:
-    name: Deploy Front Prod
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    steps:
-    - name: executing remote ssh commands
-      uses: fjogeleit/http-request-action@v1.16.1
-      with:
-        url: ${{ secrets.URL_WEBHOOK_PROD }}
-        method: 'POST'
+             ${{ env.IMAGE_NAME }};
