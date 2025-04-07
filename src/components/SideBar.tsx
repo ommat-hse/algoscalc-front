@@ -14,7 +14,10 @@ const SideBar: React.FC = () => {
       .then((res) => {
         setAlgorithmsHaving(
           res.items.map((x: IBaseEntity) => (
-            <p key={`alg-${x.name}`}>
+            <p key={`alg-${x.name}`}
+            style={{
+              marginLeft: "25px"
+            }}>
               <Link
                 href={`/algorithm?name=${x.name}`}
                 underline="hover"
@@ -44,6 +47,7 @@ const SideBar: React.FC = () => {
           cursor: "pointer",
           marginTop: "5px",
           marginBottom: "10px",
+          marginLeft: "10px"
         }}
       >
         <Link
